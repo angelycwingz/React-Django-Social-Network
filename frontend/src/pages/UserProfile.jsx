@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Flex, Text, VStack, Box, Heading, HStack, Image, Button } from "@chakra-ui/react";
-import { get_user_profile_data } from "@/api/endpoints";
+import { Flex, Text, VStack, Box, Heading, HStack, Image, Button,Spacer } from "@chakra-ui/react";
+import { get_user_profile_data, get_users_posts, toggle_follow } from "@/api/endpoints";
 import { SERVER_URL } from "@/constants/constants";
+import { Post } from "../components/index.js";
 
 function UserProfile(){
 
@@ -22,6 +23,9 @@ function UserProfile(){
                 <Box w='100%' mt='40px'>
                     <UserDetails username={username} />
                 </Box>
+                <Box w='100%' mt='50px'>
+                    <UserPosts username={username} />
+                </Box>
             </VStack>
         </Flex>
     )
@@ -36,6 +40,21 @@ function UserDetails({username}){
     const [followerCount, setFollowerCount] = useState(0)
     const [followingCount, setFollowingCount] = useState(0)
 
+    const [isOurProfile, setIsOurProfile] = useState(false)
+    const [isFollowing, setIsFollowing] = useState(false)
+
+    const handleToggleFollow = async() => {
+        console.log("userProfile :: getting data")
+        const data = await toggle_follow(username)
+        console.log("userProfile :: ", data)
+        if(data.now_following){
+            setFollowerCount(followerCount + 1)
+            setIsFollowing(true)
+        } else {
+            setFollowerCount(followerCount - 1)
+            setIsFollowing(false)
+        }
+    }
 
     useEffect(()=>{
         
@@ -43,10 +62,13 @@ function UserDetails({username}){
             try {
                 const data = await get_user_profile_data(username)
                 console.log(data)
+                setBio(data.bio)
                 setProfileImg(data.profile_image)
                 setFollowerCount(data.follower_count)
                 setFollowingCount(data.following_count)
-                setBio(data.bio)
+                
+                setIsOurProfile(data.is_our_profile)
+                setIsFollowing(data.is_following)
             } catch (error) {
                 console.log('error :: fetchdata ::', error)
             } finally{ 
@@ -74,12 +96,75 @@ function UserDetails({username}){
                             <Text>{ loading ? "-" : followingCount }</Text>
                         </VStack>
                     </HStack>
-                    <Button w='100' variant='subtle'>Edit Profile</Button>
+                    { 
+                        loading?
+                            <Spacer />
+                        :
+
+                            isOurProfile ? 
+                                <Button w='100%' variant='subtle' size='sm'>Edit Profile</Button>
+                            :
+                                <Button onClick={handleToggleFollow} colorPalette='blue' w='100%' size='sm'>{isFollowing ? 'Unfollow' : 'Follow' }</Button>
+                    }
                 </VStack>
             </HStack>
             <Text fontSize='18px'>{ loading ? "..." : bio }</Text>
         </VStack>
     )
 }
+
+
+function UserPosts({username}){
+    const [posts, setPosts] = useState([])
+    const [loading, setLoading] = useState(true) 
+
+
+    useEffect(()=>{
+
+        const fetchPosts = async () => {
+            try {
+                const posts = await get_users_posts(username)
+                console.log(posts)
+                setPosts(posts)
+            } catch (error) {
+                alert('error getting user posts')
+                
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchPosts()
+
+    }, [])
+
+
+    return(
+        <Flex w='100%' wrap='wrap' gap='30px' pb='50px'>
+            { loading ?
+             <Text>Loading....</Text>
+            :    
+                ( posts?
+                    
+                       posts.map((post) => (
+
+                        <Post
+                        key={post.id} id={post.id} username={post.username} description={post.description} formatted_date={post.formatted_date} liked={post.liked} like_count={post.like_count}>
+
+                        </Post>
+                       ))
+                    
+                :
+                    {}
+                )
+            }
+        </Flex>
+    )
+}
+
+
+
+
+
 
 export default UserProfile

@@ -1,26 +1,31 @@
-import { Flex, VStack, Field, Input, Button, Heading, Stack, Text } from '@chakra-ui/react'
+import { Flex, VStack, Field, Input, Button, Heading, Stack, Text, } from '@chakra-ui/react'
+
 import React, { useState } from 'react'
-import {login} from '../api/endpoints.js'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '@/contexts/UseAuth.jsx'
 
 function Login() {
 
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const nav = useNavigate()
+    const { auth_login } = useAuth()
 
-    const handleLogin = async () => {
+    const [loading, setLoading] = useState(false)
+
+    const handleLogin = () => {
         if(!username || !password){
             return ;  // do nothing
         } 
 
-        const data = await login(username, password)
-        console.log(data);
-        
-        if (data.success){
-            nav(`/${username}`)
-        } else {
-            alert("Invalid username and password")
+        setLoading(true)
+    
+        try {
+            auth_login(username, password)
+        } catch (error) {
+            console.log("Login :: auth_login :: ", error)
+        } finally {
+            setLoading(false)
         }
         
     }
@@ -46,6 +51,7 @@ function Login() {
             </Field.Root>
             <VStack w='100%' gap='10px' align='start'>
                 <Button w='100%' colorPalette='green'
+                {...(loading ? {loading} : {})}
                 onClick={handleLogin} >Login</Button>
                 <Stack direction="row">
                     <Text fontWeight="medium">Don't have an account? </Text>

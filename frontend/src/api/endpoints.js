@@ -10,11 +10,14 @@ const api = axios.create({
 
 api.interceptors.response.use(
     (response)=> response, 
-    async error =>{
+    async (error) =>{
         const original_request = error.config
 
-        if(error.response?.status === 401 && !original_request._retry){
-            original_request._retry = true
+        if(error.response?.status === 401 && 
+            !original_request._retry && 
+            !original_request.url.includes('/token/refresh')
+        ){
+            original_request._retry = true;
 
             try{
                 await refresh_token();
@@ -29,14 +32,19 @@ api.interceptors.response.use(
 )
 
 export async function get_user_profile_data(username){
-    const response = await api.get(`/user_data/${username}/`,{withCredentials:true})
+    const response = await api.get(`/user_data/${username}/`)
     return response.data
 }
 
 async function refresh_token(){
-    const response = await api.post('/token/refresh/')
-    return response.data
-} 
+    try {
+        const response = await api.post('/token/refresh/')
+        return response.data 
+    } catch (error) {
+        console.error("Token refresh failed", err);
+    throw err;
+    }
+}
 
 export async function login(username, password){
     const response = await api.post('/token/', {
@@ -56,3 +64,26 @@ export async function register(username, email, firstName, lastName, password){
     })
     return response.data
 } 
+
+export async function get_auth(){
+    const response = await api.get(`/authenticated/`)
+    return response.data
+}
+
+export async function toggle_follow(username) {
+    const response = await api.post('/toggle_follow/', {username: username})
+    return response.data
+}   
+
+export async function get_users_posts(username){
+    try {
+        const response = await api.get(`/posts/${username}/`)
+        return response.data
+    } catch (error) {
+        console.log("api :: get_users_posts :: error", error)
+    }
+}
+export async function toggleLike(id) {
+    const response = await api.post('/toggleLike/', {id:id})
+    return response.data
+}

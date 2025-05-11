@@ -9,6 +9,8 @@ import UserProfile from './pages/UserProfile'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import { Layout } from './components/index'
+import { AuthProvider } from './contexts/UseAuth'
+import { PrivateRoute } from './components/index'
 
 
 
@@ -18,11 +20,13 @@ function App() {
   return (
    <>
     <BrowserRouter>
-      <Routes>
-        <Route path='/:username' element={<Layout><UserProfile /></Layout>} />
-        <Route path='/Login' element={<Layout><Login /></Layout>} />
-        <Route path='/Register' element={<Layout><Register /></Layout>} />
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path='/:username' element={<Layout><PrivateRoute><UserProfile /></PrivateRoute></Layout>} />
+          <Route path='/Login' element={<Layout><Login /></Layout>} />
+          <Route path='/Register' element={<Layout><Register /></Layout>} />
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
    </>
   )
