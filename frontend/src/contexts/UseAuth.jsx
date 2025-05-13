@@ -9,6 +9,7 @@ export const AuthProvider = ({children}) => {
 
     const [auth, setAuth] = useState(false)
     const [authLoading, setAuthLoading] = useState(true)
+    const [username, setUsername] = useState('')
     const nav = useNavigate()
 
     
@@ -27,6 +28,7 @@ export const AuthProvider = ({children}) => {
         const data = await login(username, password)        
         if (data.success){
             setAuth(true)
+            setUsername(username)
             nav(`/${username}`)
         } else {
             alert("Invalid username and password")
@@ -38,7 +40,7 @@ export const AuthProvider = ({children}) => {
     }, [window.location.pathname])
 
     return(
-        <AuthContext.Provider value={{auth, authLoading, auth_login}}>
+        <AuthContext.Provider value={{auth, authLoading, auth_login, username}}>
             {children}
         </AuthContext.Provider>
     )

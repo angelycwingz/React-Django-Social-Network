@@ -11,6 +11,8 @@ import Register from './pages/Register'
 import { Layout } from './components/index'
 import { AuthProvider } from './contexts/UseAuth'
 import { PrivateRoute } from './components/index'
+import CreatePost from './pages/CreatePost'
+import Home from './pages/Home'
 
 
 
@@ -25,6 +27,8 @@ function App() {
           <Route path='/:username' element={<Layout><PrivateRoute><UserProfile /></PrivateRoute></Layout>} />
           <Route path='/Login' element={<Layout><Login /></Layout>} />
           <Route path='/Register' element={<Layout><Register /></Layout>} />
+          <Route path='/create/post' element={<Layout><PrivateRoute><CreatePost /></PrivateRoute></Layout>} />
+          <Route path='/' element={<Layout><PrivateRoute><Home /></PrivateRoute></Layout>} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

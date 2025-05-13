@@ -87,3 +87,14 @@ export async function toggleLike(id) {
     const response = await api.post('/toggleLike/', {id:id})
     return response.data
 }
+
+export async function create_post(description) {
+    const response =  await api.post('/create_post/', {description: description})
+    return response.data
+    
+}
+
+export async function get_posts(num) {
+    const response = await api.get(`/get_posts/?page=${num}`)
+    return response.data
+}
