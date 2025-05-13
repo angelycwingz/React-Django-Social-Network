@@ -3,6 +3,7 @@ import { Flex, Text, VStack, Box, Heading, HStack, Image, Button,Spacer } from "
 import { get_user_profile_data, get_users_posts, toggle_follow } from "@/api/endpoints";
 import { SERVER_URL } from "@/constants/constants";
 import { Post } from "../components/index.js";
+import { useNavigate } from "react-router-dom";
 
 function UserProfile(){
 
@@ -42,6 +43,12 @@ function UserDetails({username}){
 
     const [isOurProfile, setIsOurProfile] = useState(false)
     const [isFollowing, setIsFollowing] = useState(false)
+
+    const nav = useNavigate()
+
+    const handleEditProfile = () => {
+        nav('/settings/')
+    }
 
     const handleToggleFollow = async() => {
         console.log("userProfile :: getting data")
@@ -102,7 +109,7 @@ function UserDetails({username}){
                         :
 
                             isOurProfile ? 
-                                <Button w='100%' variant='subtle' size='sm'>Edit Profile</Button>
+                                <Button onClick={handleEditProfile} w='100%' variant='subtle' size='sm'>Edit Profile</Button>
                             :
                                 <Button onClick={handleToggleFollow} colorPalette='blue' w='100%' size='sm'>{isFollowing ? 'Unfollow' : 'Follow' }</Button>
                     }

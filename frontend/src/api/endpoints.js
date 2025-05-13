@@ -103,3 +103,17 @@ export async function search_users(search) {
     const response = await api.get(`/search/?query=${search}`)
     return response.data
 }
+
+export async function logout() {
+    const response = await api.post('/logout/')
+    return response.data
+}
+
+export async function update_user(values) {
+    const response = await api.patch('/update_user/', 
+        values, 
+        {headers: {'Content-Type': 'multipart/form-data'}}
+    )
+
+    return response.data
+}

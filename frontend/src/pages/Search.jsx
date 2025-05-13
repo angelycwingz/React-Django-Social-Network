@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Flex, VStack, Text, Button, Heading, Field, Input, HStack, Box, Image } from '@chakra-ui/react'
+import { Flex, VStack, Text, Button, Heading, Input, HStack, Box, Image } from '@chakra-ui/react'
 import { search_users } from '@/api/endpoints'
 import { SERVER_URL } from '@/constants/constants'
 import { useNavigate } from 'react-router-dom'

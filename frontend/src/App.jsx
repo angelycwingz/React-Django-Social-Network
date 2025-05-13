@@ -14,6 +14,7 @@ import { PrivateRoute } from './components/index'
 import CreatePost from './pages/CreatePost'
 import Home from './pages/Home'
 import Search from './pages/Search'
+import Settings from './pages/Settings'
 
 
 
@@ -31,6 +32,7 @@ function App() {
           <Route path='/create/post' element={<Layout><PrivateRoute><CreatePost /></PrivateRoute></Layout>} />
           <Route path='/' element={<Layout><PrivateRoute><Home /></PrivateRoute></Layout>} />
           <Route path='/search' element={<Layout><PrivateRoute><Search /></PrivateRoute></Layout>} />
+          <Route path='/settings' element={<Layout><PrivateRoute><Settings /></PrivateRoute></Layout>} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

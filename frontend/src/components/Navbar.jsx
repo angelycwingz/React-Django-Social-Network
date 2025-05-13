@@ -6,6 +6,7 @@ import { IoPersonOutline } from "react-icons/io5";
 import { IoCreateOutline } from "react-icons/io5";
 import { FaHouse } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
+import { IoIosSettings } from "react-icons/io";
 
 
 function Navbar() {
@@ -30,6 +31,7 @@ function Navbar() {
                 <Text cursor='pointer' onClick={(route)=> handleNavigate('create/post')}><IoCreateOutline size='24px' /></Text>
                 <Text cursor='pointer' onClick={(route)=> handleNavigate('')}><FaHouse size='22px' /></Text>
                 <Text cursor='pointer' onClick={(route)=> handleNavigate('search/')}><IoSearch size='22px' /></Text>
+                <Text cursor='pointer' onClick={(route)=> handleNavigate('settings/')}><IoIosSettings size='24px' /></Text>
             </HStack>
         </HStack>
     </Flex>
