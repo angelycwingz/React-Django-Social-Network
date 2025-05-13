@@ -13,6 +13,7 @@ import { AuthProvider } from './contexts/UseAuth'
 import { PrivateRoute } from './components/index'
 import CreatePost from './pages/CreatePost'
 import Home from './pages/Home'
+import Search from './pages/Search'
 
 
 
@@ -29,6 +30,7 @@ function App() {
           <Route path='/Register' element={<Layout><Register /></Layout>} />
           <Route path='/create/post' element={<Layout><PrivateRoute><CreatePost /></PrivateRoute></Layout>} />
           <Route path='/' element={<Layout><PrivateRoute><Home /></PrivateRoute></Layout>} />
+          <Route path='/search' element={<Layout><PrivateRoute><Search /></PrivateRoute></Layout>} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

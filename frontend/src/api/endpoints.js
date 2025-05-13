@@ -98,3 +98,8 @@ export async function get_posts(num) {
     const response = await api.get(`/get_posts/?page=${num}`)
     return response.data
 }
+
+export async function search_users(search) {
+    const response = await api.get(`/search/?query=${search}`)
+    return response.data
+}
